@@ -8,8 +8,8 @@ function Slider(slider) {
   let next;
   // Select needed Elements from slider
   const slides = slider.querySelector(".slides");
-  const prevButton = document.querySelector("goToPrev");
-  const nextButton = document.querySelector("goToNext");
+  const prevButton = document.querySelector(".goToPrev");
+  const nextButton = document.querySelector(".goToNext");
   console.log(slides);
 
   function startSlider() {
@@ -25,8 +25,29 @@ function Slider(slider) {
     next.classList.add("next");
   }
 
+  function move(direction) {
+    // Clear classes
+    const classesToRemove = ["prev", "current", "next"];
+    prev.classList.remove(...classesToRemove);
+    current.classList.remove(...classesToRemove);
+    next.classList.remove(...classesToRemove);
+
+    if (direction == "back") {
+      // Make new array of new values, and destructure them over into the prev, current, and next variables
+      [prev, current, next] = [prev.previousElementSibling, prev, current];
+    } else {
+      [prev, current, next] = [current, next, next.nextElementSibling];
+    }
+
+    applyClasses();
+  }
+
   startSlider();
   applyClasses();
+
+  // Event listeners
+  prevButton.addEventListener("click", () => move("back"));
+  nextButton.addEventListener("click", move);
 }
 
 const mySlider = Slider(document.querySelector(".slider"));
